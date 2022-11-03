@@ -1,77 +1,52 @@
-import java.util.Random;
+import model.*;
+import utils.Operations;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    private static BinTree<Integer> binTree;
+    private static AVLTree<Integer> avlTree;
+
+    public static void main(String[] args) throws Exception {
+
         Scanner sn = new Scanner(System.in);
         boolean salir = false;
-        int opcion;
+        int option;
 
-        Node node = new Node(50); //Raiz inicializada en 50
 
         while(!salir){
-
+            System.out.println("------------------------------");
+            System.out.println("MENU");
+            System.out.println("------------------------------");
             System.out.println("1. Crear árbol aleatorio.");
             System.out.println("2. Crear árbol manual.");
             System.out.println("3. Crear árbol AVL aleatorio.");
             System.out.println("4. Crear árbol AVL manual.");
-            System.out.println("5. Mostrar árbol ordenado..");
-            System.out.println("6. Mostrar dibujo árbol");
-            System.out.println("7. Cerrar programa");
+            System.out.println("5. Mostrar árbol ordenado.");
+            System.out.println("6. Mostrar dibujo árbol.");
+            System.out.println("7. Cerrar programa.");
+            System.out.println("------------------------------");
+            System.out.println("Ingrese una de las opciones.");
+            System.out.print("Opción: ");
+            option = sn.nextInt();
 
-            System.out.println("Escribe una de las opciones");
-            opcion = sn.nextInt();
-
-            switch(opcion){
+            switch(option){
                 case 1:
-                    System.out.println("Crear árbol aleatorio.");
-                    System.out.println("Ingresar la cantidad de elementos del árbol: ");
-                    Scanner in = new Scanner(System.in);
-                    int q = in.nextInt();
-                    Random r = new Random();
-                    int low = 1;
-                    int high = 100;
-
-                    int num;
-                    for(num = 0; num < q; ++num) {
-                        int result = r.nextInt(high - low) + low;
-                        System.out.println("Elemento a insertar: " + result);
-                        node.add(result);
-                    }
-
+                    binTree = Operations.randomBinaryTree();
                     break;
                 case 2:
-                    System.out.println("Crear árbol manual.");
-                    System.out.println("Ingresar la cantidad de elementos del árbol: ");
-                    Scanner inp = new Scanner(System.in);
-                    int t = inp.nextInt();
-                    int i;
-                    for(i = 0; i < t; ++i) {
-                        System.out.println("Ingresar un elemento: ");
-                        Scanner a = new Scanner(System.in);
-                        int number = a.nextInt();
-                        node.add(number);
-                    }
+                    binTree = Operations.manualBinaryTree();
                     break;
                 case 3:
-                    System.out.println("Has seleccionado la opcion 3");
+                    avlTree = Operations.randomAVLTree();
                     break;
                 case 4:
-                    System.out.println("Has seleccionado la opcion 4");
+                    avlTree = Operations.manualAVLTree();
                     break;
                 case 5:
-                    System.out.println("-------------------------");
-                    System.out.println("Datos ordenados: ");
-                    node.printInOrderBinaryTree();
-                    System.out.println();
-                    System.out.println("-------------------------");
-                    System.out.println();
+                    Operations.printTreesInOrder(binTree, avlTree);
                     break;
                 case 6:
-                    System.out.println("-------------------------");
-                    System.out.println("Imprimir Arbol: ");
-                    System.out.println(node.printTree(node));
-                    System.out.println("-------------------------");
+                    Operations.printTreeDiagram(binTree, avlTree);
                     break;
                 case 7:
                     salir=true;

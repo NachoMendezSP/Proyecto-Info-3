@@ -42,7 +42,7 @@ public class Main {
                     binTree = Operations.manualBinaryTree();
                     break;
                 case 3:
-                    avlTree = Operations.randomAVLTree();
+
                     break;
                 case 4:
                     salir=true;

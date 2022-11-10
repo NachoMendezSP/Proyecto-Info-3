@@ -36,10 +36,10 @@ public class Main {
 
             switch(option){
                 case 1:
-                    binTree = Operations.randomBinaryTree();
+
                     break;
                 case 2:
-                    binTree = Operations.manualBinaryTree();
+
                     break;
                 case 3:
 

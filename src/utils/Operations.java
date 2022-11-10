@@ -18,7 +18,7 @@ public class Operations {
         cantidad = sc.nextInt();
 
         for (int i = 0; i < cantidad; i++) {
-            binTree.add(ran.nextInt(100));
+            binTree.insert(ran.nextInt(100), binTree.getRoot());
         }
 
         if (!binTree.isEmpty()) System.out.println("Arbol binario aleatorio creado.");
@@ -38,7 +38,7 @@ public class Operations {
         do {
             System.out.print("Elemento: ");
             num = sc.nextInt();
-            if (num >= 0) binTree.add(num);
+            if (num >= 0) binTree.insert(num, binTree.getRoot());
         } while (num != -1);
 
         if (!binTree.isEmpty()) System.out.println("Arbol binario manual creado.");
@@ -60,7 +60,7 @@ public class Operations {
         cantidad = sc.nextInt();
 
         for (int i = 0; i < cantidad; i++) {
-            avlTree.add(ran.nextInt(100));
+            avlTree.insert(avlTree.getRoot(), ran.nextInt(100));
         }
 
         if (!avlTree.isEmpty()) System.out.println("Arbol binario AVL aleatorio creado.");
@@ -80,7 +80,7 @@ public class Operations {
         do {
             System.out.print("Elemento: ");
             num = sc.nextInt();
-            if (num >= 0) avlTree.add(num);
+            if (num >= 0) avlTree.insert(avlTree.getRoot(), num);
         } while (num != -1);
 
         if (!avlTree.isEmpty()) System.out.println("Arbol binario AVL manual creado");

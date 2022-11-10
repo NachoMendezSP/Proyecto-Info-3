@@ -3,6 +3,7 @@ import utils.Operations;
 import java.util.Scanner;
 
 public class Main {
+        private static BinTree<Integer> binTree;
         public static void main(String[] args) throws Exception {
 
         Scanner sn = new Scanner(System.in);
@@ -28,18 +29,22 @@ public class Main {
             System.out.println("2. Insertar datos manualmente.");
 
             System.out.println("¿Qué operación desea realizar?");
-            System.out.println("3. Buscar un dato.");
-            System.out.println("4. Eliminar un dato.");
-            System.out.println("5. Mostrar árbol ordenado.");
-            System.out.println("6. Mostrar dibujo árbol.");
-            System.out.println("7. Volver al menú principal.");
+            System.out.println("1. Buscar un dato.");
+            System.out.println("2. Eliminar un dato.");
+            System.out.println("3. Mostrar árbol ordenado.");
+            System.out.println("4. Mostrar dibujo árbol.");
+            System.out.println("5. Volver al menú principal.");
 
+
+            binTree = Operations.randomBinaryTree();
+
+            System.out.println(binTree.printTree(binTree.getRoot()));
             switch(option){
                 case 1:
-                    binTree = Operations.randomBinaryTree();
+
                     break;
                 case 2:
-                    binTree = Operations.manualBinaryTree();
+
                     break;
                 case 3:
 

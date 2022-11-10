@@ -4,79 +4,138 @@ public class AVLTree<AnyType extends Comparable<AnyType>> {
 
     private Node<AnyType> root;
 
-    public AVLTree<AnyType> add(AnyType data) {
-        root = add(data, root);
-        return this;
+    public int height(Node<AnyType> N) {
+        if (N == null)
+            return 0;
+        return N.getHeight();
     }
 
-    private Node<AnyType> add(AnyType data, Node<AnyType> node) {
-        if (node == null) {
-            return new Node<>(data);
-        }
-        if (data.compareTo(node.getData()) < 0) {
-            node.setLeft(add(data, node.getLeft()));
-        } else if (data.compareTo(node.getData()) > 0) {
-            node.setRight(add(data, node.getRight()));
-        } else {
+    public int max(int a, int b) {
+        return (a > b) ? a : b;
+    }
+
+    public Node<AnyType> rightRotate(Node<AnyType> y) {
+        Node<AnyType> x = y.getLeft();
+        Node<AnyType> T2 = x.getRight();
+        x.setRight(y);
+        y.setLeft(T2);
+        y.setHeight(max(height(y.getLeft()), height(y.getRight())) + 1);
+        x.setHeight(max(height(x.getLeft()), height(x.getRight())) + 1);
+        return x;
+    }
+
+    public Node<AnyType> leftRotate(Node<AnyType> x) {
+        Node<AnyType> y = x.getRight();
+        Node<AnyType> T2 = y.getLeft();
+        y.setLeft(x);
+        x.setRight(T2);
+        x.setHeight(max(height(x.getLeft()), height(x.getRight())) + 1);
+        y.setHeight(max(height(y.getLeft()), height(y.getRight())) + 1);
+        return y;
+    }
+
+    // Get balance factor of a node
+    int getBalanceFactor(Node<AnyType> N) {
+        if (N == null)
+            return 0;
+        return height(N.getLeft()) - height(N.getRight());
+    }
+
+    // Insert a node
+    public Node<AnyType> insert(Node<AnyType> node, AnyType item) {
+
+        // Find the position and insert the node
+        if (node == null)
+            return (new Node<AnyType>(item));
+        if (item.compareTo(node.getData()) < 0)
+            node.setLeft(insert(node.getLeft(), item));
+        else if (item.compareTo(node.getData()) > 0)
+            node.setRight(insert(node.getRight(), item));
+        else
             return node;
-        }
-        updateHeight(node);
-        return applyRotation(node);
-    }
 
-    public void delete(AnyType data) {
-        root = delete(data, root);
-    }
-
-    private Node<AnyType> delete(AnyType data, Node<AnyType> node) {
-        if (node == null) {
-            return null;
-        }
-        if (data.compareTo(node.getData()) < 0) {
-            node.setLeft(delete(data, node.getLeft()));
-        } else if (data.compareTo(node.getData()) > 0) {
-            node.setRight(delete(data, node.getRight()));
-        } else {
-            if (node.getLeft() == null) {
-                return node.getRight();
-            } else if (node.getRight() == null) {
-                return node.getLeft();
+        // Update the balance factor of each node
+        // And, balance the tree
+        node.setHeight(1 + max(height(node.getLeft()), height(node.getRight())));
+        int balanceFactor = getBalanceFactor(node);
+        if (balanceFactor > 1) {
+            if (item.compareTo(node.getLeft().getData()) < 0) {
+                return rightRotate(node);
+            } else if (item.compareTo(node.getLeft().getData()) > 0) {
+                node.setLeft(leftRotate(node.getLeft()));
+                return rightRotate(node);
             }
-            node.setData(getMax(node.getLeft()));
-            node.setLeft(delete(node.getData(), node.getLeft()));
         }
-        updateHeight(node);
-        return applyRotation(node);
+        if (balanceFactor < -1) {
+            if (item.compareTo(node.getRight().getData()) > 0) {
+                return leftRotate(node);
+            } else if (item.compareTo(node.getRight().getData()) < 0) {
+                node.setRight(rightRotate(node.getRight()));
+                return leftRotate(node);
+            }
+        }
+        return node;
     }
 
-    public AnyType getMax() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getMax(root);
+    public Node<AnyType> nodeWithMimumValue(Node<AnyType> node) {
+        Node<AnyType> current = node;
+        while (current.getLeft() != null)
+            current = current.getLeft();
+        return current;
     }
 
-    private AnyType getMax(Node<AnyType> node) {
-        if (node.getRight() != null) {
-            return getMax(node.getRight());
-        }
-        return node.getData();
-    }
+    // Delete a node
+    public Node<AnyType> delete(Node<AnyType> root, AnyType item) {
 
-    public AnyType getMin() {
-        if (isEmpty()) {
-            return null;
+        // Find the node to be deleted and remove it
+        if (root == null)
+            return root;
+        if (item.compareTo(root.getData()) < 0)
+            root.setLeft(delete(root.getLeft(), item));
+        else if (item.compareTo(root.getData()) > 0)
+            root.setRight(delete(root.getRight(), item));
+        else {
+            if ((root.getLeft() == null) || (root.getRight() == null)) {
+                Node<AnyType> temp = null;
+                if (temp == root.getLeft())
+                    temp = root.getRight();
+                else
+                    temp = root.getLeft();
+                if (temp == null) {
+                    temp = root;
+                    root = null;
+                } else
+                    root = temp;
+            } else {
+                Node<AnyType> temp = nodeWithMimumValue(root.getRight());
+                root.setData(temp.getData());
+                root.setRight(delete(root.getRight(), temp.getData()));
+            }
         }
-        return getMin(root);
-    }
+        if (root == null)
+            return root;
 
-    private AnyType getMin(Node<AnyType> node) {
-        if (node.getLeft() != null) {
-            return getMin(node.getLeft());
+        // Update the balance factor of each node and balance the tree
+        root.setHeight(max(height(root.getLeft()), height(root.getRight())) + 1);
+        int balanceFactor = getBalanceFactor(root);
+        if (balanceFactor > 1) {
+            if (getBalanceFactor(root.getLeft()) >= 0) {
+                return rightRotate(root);
+            } else {
+                root.setLeft(leftRotate(root.getLeft()));
+                return rightRotate(root);
+            }
         }
-        return node.getData();
+        if (balanceFactor < -1) {
+            if (getBalanceFactor(root.getRight()) <= 0) {
+                return leftRotate(root);
+            } else {
+                root.setRight(rightRotate(root.getRight()));
+                return leftRotate(root);
+            }
+        }
+        return root;
     }
-
     public boolean isEmpty() {
         return root == null;
     }
@@ -84,60 +143,6 @@ public class AVLTree<AnyType extends Comparable<AnyType>> {
     public void makeEmpty() {
         root = null;
     }
-
-    private Node<AnyType> applyRotation(Node<AnyType> node) {
-        int balance = balance(node);
-        if (balance > 1) {
-            if (balance(node.getLeft()) < 0) {
-                node.setLeft(rotateLeft(node.getLeft()));
-            }
-            return rotateRight(node);
-        }
-        if (balance < -1) {
-            if (balance(node.getRight()) > 0) {
-                node.setRight(rotateRight(node.getRight()));
-            }
-            return rotateLeft(node);
-        }
-        return node;
-    }
-
-    private Node<AnyType> rotateRight(Node<AnyType> node) {
-        Node<AnyType> leftNode = node.getLeft();
-        Node<AnyType> centerNode = leftNode.getRight();
-        leftNode.setRight(node);
-        node.setLeft(centerNode);
-        updateHeight(node);
-        updateHeight(leftNode);
-        return leftNode;
-    }
-
-    private Node<AnyType> rotateLeft(Node<AnyType> node) {
-        Node<AnyType> rightNode = node.getRight();
-        Node<AnyType> centerNode = rightNode.getLeft();
-        rightNode.setLeft(node);
-        node.setRight(centerNode);
-        updateHeight(node);
-        updateHeight(rightNode);
-        return rightNode;
-    }
-
-    private void updateHeight(Node<AnyType> node) {
-        int maxHeight = Math.max(
-                height(node.getLeft()),
-                height(node.getRight())
-        );
-        node.setHeight(maxHeight + 1);
-    }
-
-    private int balance(Node<AnyType> node) {
-        return node != null ? height(node.getLeft()) - height(node.getRight()) : 0;
-    }
-
-    private int height(Node<AnyType> node) {
-        return node != null ? node.getHeight() : 0;
-    }
-
     public void printInOrder() {
 
         if (root.getLeft() != null) {

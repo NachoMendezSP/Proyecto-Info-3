@@ -8,6 +8,69 @@ public class BinTree<AnyType extends Comparable<AnyType>> {
     public BinTree(){
         this.depth = 0;
     }
+
+    public AnyType elementAt (Node<AnyType> t){
+        return t == null ? null : t.getData();
+    }
+
+    public Node<AnyType> find (AnyType x, Node<AnyType> t){
+        while (t != null){
+            if (x.compareTo(t.getData()) < 0)
+                t = t.getLeft();
+            else if (x.compareTo(t.getData()) > 0)
+                t = t.getRight();
+            else
+                return t; // Match
+        }
+        return null; // Not found
+    }
+
+    public Node<AnyType> findMin (Node<AnyType> t){
+        if (t != null)
+            while (t.getLeft() != null)
+                t = t.getLeft();
+        return t;
+    }
+
+    public Node<AnyType> insert (AnyType x, Node<AnyType> t) throws Exception {
+        if (t == null)
+            t = new Node<AnyType>(x);
+        else if (x.compareTo(t.getData()) < 0)
+            t.setLeft(insert(x, t.getLeft()));
+        else if (x.compareTo(t.getData()) > 0)
+            t.setRight(insert (x, t.getRight()));
+        else
+            throw new Exception (x.toString()); // Duplicate
+        return t;
+    }
+
+    public Node<AnyType> removeMin (Node<AnyType> t) throws Exception {
+        if (t == null)
+            throw new Exception(); // Item Not Found
+        else if (t.getLeft() != null){
+            t.setRight(removeMin(t.getLeft()));
+            return t;
+        }
+        else
+            return t.getRight();
+    }
+
+    public Node<AnyType> remove (AnyType x, Node<AnyType> t) throws Exception {
+        if (t == null)
+            throw new Exception (x.toString()); // Duplicate
+        if (x.compareTo(t.getData()) < 0)
+            t.setLeft(remove(x, t.getLeft()));
+        else if (x.compareTo(t.getData()) > 0)
+            t.setRight(remove(x, t.getLeft()));
+        else if (t.getLeft() != null && t.getRight() != null){ //Two children
+            t.setData(findMin(t.getRight()).getData());
+            t.setRight(removeMin(t.getRight()));
+        }
+        else
+            t = (t.getLeft() != null) ? t.getLeft() : t.getRight();
+        return t;
+    }
+/*
     public void add(AnyType x) {
         if (isEmpty()) root = new Node<>(x);
         else if (x.compareTo(root.getData()) < 0) {
@@ -125,6 +188,7 @@ public class BinTree<AnyType extends Comparable<AnyType>> {
         else if (x.compareTo(root.getData()) > 0 && node.getRight() != null) return search(x, node.getRight());
         else throw new Exception("El elemento no esta en el arbol.");
     }
+*/
 
     public boolean isEmpty() {
         return root == null;

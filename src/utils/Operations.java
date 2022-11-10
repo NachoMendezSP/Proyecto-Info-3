@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Operations {
     public static BinTree<Integer> randomBinaryTree() throws Exception {
-        int cant;
+        int cantidad;
         BinTree<Integer> binTree = new BinTree<>();
         Scanner sc = new Scanner(System.in);
         Random ran = new Random();
@@ -15,9 +15,9 @@ public class Operations {
         System.out.println("Arbol binario aleatorio");
         System.out.println("Ingrese la cantidad de elementos del arbol binario.");
         System.out.print("Cantidad: ");
-        cant = sc.nextInt();
+        cantidad = sc.nextInt();
 
-        for (int i = 0; i < cant; i++) {
+        for (int i = 0; i < cantidad; i++) {
             binTree.add(ran.nextInt(100));
         }
 

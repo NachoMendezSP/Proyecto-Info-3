@@ -1,7 +1,7 @@
 package model;
 
 public class BinHeap {
-    private static final int MAX_SIZE = 15;
+    private static final int MAX_SIZE = 100;
     private int [] heap;
     private int size;
 
@@ -104,10 +104,25 @@ public class BinHeap {
 
     // Imprime el monticulo
     public void printHeap() {
+        System.out.println("Elementos del montículo (mayor elemento primero):");
         for (int i = 0; i < size; i++) {
             System.out.print(heap[i] + " ");
         }
         System.out.println();
     }
 
+    public boolean find(int x, BinHeap mont){
+        for (int i = 0; i < mont.size; i++) {
+           if(x == mont.heap[i])
+               return true;
+        }
+        return false;
+    }
+
+    public boolean isEmpty() {
+        if (size == 0)
+            return true;
+        else
+            return false;
+    }
 }

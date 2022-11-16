@@ -84,6 +84,18 @@ public class AVLTree<AnyType extends Comparable<AnyType>> {
         return current;
     }
 
+    public boolean find (AnyType x, Node<AnyType> t){
+        while (t != null){
+            if (x.compareTo(t.getData()) < 0)
+                t = t.getLeft();
+            else if (x.compareTo(t.getData()) > 0)
+                t = t.getRight();
+            else
+                return true; // Match
+        }
+        return false; // Not found
+    }
+
     // Delete a node
     public Node<AnyType> delete(Node<AnyType> root, AnyType item) {
 
@@ -143,6 +155,14 @@ public class AVLTree<AnyType extends Comparable<AnyType>> {
     public void makeEmpty() {
         root = null;
     }
+
+    public void preOrder(Node<AnyType> node) {
+        if (node != null) {
+            System.out.print(node.getData() + " ");
+            preOrder(node.getLeft());
+            preOrder(node.getRight());
+        }
+    }
     public void printInOrder() {
 
         if (root.getLeft() != null) {
@@ -159,6 +179,7 @@ public class AVLTree<AnyType extends Comparable<AnyType>> {
     }
 
     private void printInOrder(Node<AnyType> node) {
+        System.out.println("Árbol de menor a mayor:");
         if (node != null) {
             printInOrder(node.getLeft());
             System.out.print(node.getData() + "\t");

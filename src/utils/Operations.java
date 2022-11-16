@@ -5,134 +5,240 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Operations {
-    public static BinTree<Integer> randomBinaryTree() throws Exception {
-        int cantidad;
-        BinTree<Integer> binTree = new BinTree<>();
-        Scanner sc = new Scanner(System.in);
-        Random ran = new Random();
 
+    private static BinTree<Integer> binTree;
+    private static AVLTree<Integer> avlTree;
+    private static BinHeap binHeap;
+    private static final Scanner sc = new Scanner(System.in);
+
+    public static void manualGeneration (int option) throws Exception {
+        int number;
+        switch (option){
+            case 1:
+                BinTree<Integer> auxBin = new BinTree<>();
+
+                System.out.println("------------------------------");
+                System.out.println("Arbol binario manual.");
+                System.out.println("Ingrese el elemento a insertar. Ingrese -1 para salir.");
+
+                do {
+                    System.out.print("Elemento: ");
+                    number = sc.nextInt();
+                    if (number >= 0) auxBin.setRoot(auxBin.insert(auxBin.getRoot(), number));
+                } while (number != -1);
+
+                if (!auxBin.isEmpty()) System.out.println("Arbol binario manual creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                binTree = auxBin;
+                break;
+            case 2:
+                AVLTree<Integer> auxAVL = new AVLTree<>();
+
+                System.out.println("------------------------------");
+                System.out.println("Arbol binario manual.");
+                System.out.println("Ingrese el elemento a insertar. Ingrese -1 para salir.");
+
+                do {
+                    System.out.print("Elemento: ");
+                    number = sc.nextInt();
+                    if (number >= 0) auxAVL.setRoot(auxAVL.insert(auxAVL.getRoot(), number));
+                } while (number != -1);
+
+                if (!auxAVL.isEmpty()) System.out.println("Arbol AVL manual creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                avlTree = auxAVL;
+                break;
+            case 3:
+                BinHeap auxHeap = new BinHeap();
+                System.out.println("------------------------------");
+                System.out.println("Montículo binario manual.");
+                System.out.println("Ingrese el elemento a insertar. Ingrese -1 para salir.");
+
+                do {
+                    System.out.print("Elemento: ");
+                    number = sc.nextInt();
+                    if (number >= 0) auxHeap.insert(number);
+                } while (number != -1);
+
+                if (!auxHeap.isEmpty()) System.out.println("Montículo binario manual creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                binHeap = auxHeap;
+                break;
+        }
+    }
+
+    public static void randomGeneration (int option) throws Exception{
+        int number;
+        Random rng = new Random();
+        switch (option){
+            case 1:
+                BinTree<Integer> auxBin = new BinTree<>();
+
+                System.out.println("------------------------------");
+                System.out.println("Arbol binario aleatorio.");
+                System.out.println("Ingrese la cantidad de elementos del arbol binario.");
+                System.out.print("Cantidad: ");
+                number = sc.nextInt();
+
+                for (int i = 0; i < number; i++) {
+                    auxBin.setRoot(auxBin.insert(auxBin.getRoot(), rng.nextInt(100)));
+                }
+
+                if (!auxBin.isEmpty()) System.out.println("Arbol binario aleatorio creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                binTree = auxBin;
+                break;
+            case 2:
+                AVLTree<Integer> auxAVL = new AVLTree<>();
+
+                System.out.println("------------------------------");
+                System.out.println("Arbol AVL aleatorio.");
+                System.out.println("Ingrese la cantidad de elementos del arbol AVL.");
+                System.out.print("Cantidad: ");
+                number = sc.nextInt();
+
+                for (int i = 0; i < number; i++) {
+                    auxAVL.setRoot(auxAVL.insert(auxAVL.getRoot(), rng.nextInt(100)));
+                }
+
+                if (!auxAVL.isEmpty()) System.out.println("Arbol AVL aleatorio creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                avlTree = auxAVL;
+                break;
+            case 3:
+                BinHeap auxHeap = new BinHeap();
+
+                System.out.println("------------------------------");
+                System.out.println("Montículo binario aleatorio.");
+                System.out.println("Ingrese la cantidad de elementos del montículo binario.");
+                System.out.print("Cantidad: ");
+                number = sc.nextInt();
+
+                for (int i = 0; i < number; i++) {
+                    auxHeap.insert(rng.nextInt(100));
+                }
+
+                if (!auxHeap.isEmpty()) System.out.println("Montículo binario manual creado.");
+                else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
+
+                binHeap = auxHeap;
+                break;
+        }
+    }
+
+    public static void search (int option){
+        int number;
         System.out.println("------------------------------");
-        System.out.println("Arbol binario aleatorio");
-        System.out.println("Ingrese la cantidad de elementos del arbol binario.");
-        System.out.print("Cantidad: ");
-        cantidad = sc.nextInt();
+        System.out.print("Ingrese el elemento que desea buscar: ");
+        number = sc.nextInt();
 
-        for (int i = 0; i < cantidad; i++) {
-            binTree.insert(ran.nextInt(100), binTree.getRoot());
+        switch (option){
+            case 1:
+                if(binTree.find(number, binTree.getRoot()))
+                    System.out.println("El elemento se encuentra en el árbol.");
+                else
+                    System.out.println("El elemento no se encuentra en el árbol.");
+                break;
+            case 2:
+                if(avlTree.find(number, avlTree.getRoot()))
+                    System.out.println("El elemento se encuentra en el árbol.");
+                else
+                    System.out.println("El elemento no se encuentra en el árbol.");
+                break;
+            case 3:
+                if(binHeap.find(number, binHeap))
+                    System.out.println("El elemento se encuentra en el árbol.");
+                else
+                    System.out.println("El elemento no se encuentra en el árbol.");
+                break;
+        }
+    }
+    public static void delete (int option) throws Exception {
+        int number;
+
+        switch (option) {
+            case 1:
+                System.out.println("------------------------------");
+                System.out.print("Ingrese el elemento que desea eliminar: ");
+                number = sc.nextInt();
+                if (!binTree.find(number, binTree.getRoot()))
+                    System.out.println("El elemento no se encuentra en el árbol.");
+                else {
+                    System.out.println("Antes de eliminar: ");
+                    System.out.println(binTree.printTree(binTree.getRoot()));
+                    binTree.delete(binTree.getRoot(), number);
+                    System.out.println("Luego de eliminar: ");
+                    System.out.println(binTree.printTree(binTree.getRoot()));
+                }
+                break;
+            case 2:
+                System.out.println("------------------------------");
+                System.out.print("Ingrese el elemento que desea eliminar: ");
+                number = sc.nextInt();
+                if (!avlTree.find(number, avlTree.getRoot()))
+                    System.out.println("El elemento no se encuentra en el árbol.");
+                else {
+                    System.out.println("Antes de eliminar: ");
+                    System.out.println(avlTree.printTree(avlTree.getRoot()));
+                    avlTree.delete(avlTree.getRoot(), number);
+                    System.out.println("Luego de eliminar: ");
+                    System.out.println(avlTree.printTree(avlTree.getRoot()));
+                }
+                break;
+            case 3:
+                System.out.println("Se eliminará el mayor elemento.");
+                System.out.println("Antes de eliminar: ");
+                binHeap.printHeap();
+                binHeap.extractMax();
+                System.out.println("Luego de eliminar: ");
+                binHeap.printHeap();
+                break;
+        }
+    }
+    public static void insert (int option) throws Exception {
+        int number;
+        System.out.println("------------------------------");
+        System.out.print("Ingrese el elemento que desea ingresar: ");
+        number = sc.nextInt();
+
+        switch (option) {
+            case 1:
+                binTree.setRoot(binTree.insert(binTree.getRoot(), number));
+                break;
+            case 2:
+                avlTree.setRoot(avlTree.insert(avlTree.getRoot(), number));
+                break;
+            case 3:
+                binHeap.insert(number);
+                break;
         }
 
-        if (!binTree.isEmpty()) System.out.println("Arbol binario aleatorio creado.");
-        else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
-        return binTree;
     }
-
-    public static BinTree<Integer> manualBinaryTree() throws Exception {
-        int num;
-        BinTree<Integer> binTree = new BinTree<>();
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("------------------------------");
-        System.out.println("Arbol binario manual");
-        System.out.println("Ingrese el elemento a ingresar. Ingrese -1 para salir.");
-
-        do {
-            System.out.print("Elemento: ");
-            num = sc.nextInt();
-            if (num >= 0) binTree.insert(num, binTree.getRoot());
-        } while (num != -1);
-
-        if (!binTree.isEmpty()) System.out.println("Arbol binario manual creado.");
-        else throw new Exception("No pudo crearse el arbol binario o se creo vacio.");
-        return binTree;
-
-    }
-
-    public static AVLTree<Integer> randomAVLTree() throws Exception {
-        int cantidad;
-        AVLTree<Integer> avlTree = new AVLTree<>();
-        Scanner sc = new Scanner(System.in);
-        Random ran = new Random();
-
-        System.out.println("------------------------------");
-        System.out.println("Arbol AVL aleatorio");
-        System.out.println("Ingrese la cantidad de elementos del arbol AVL");
-        System.out.print("Cantidad: ");
-        cantidad = sc.nextInt();
-
-        for (int i = 0; i < cantidad; i++) {
-            avlTree.insert(avlTree.getRoot(), ran.nextInt(100));
-        }
-
-        if (!avlTree.isEmpty()) System.out.println("Arbol binario AVL aleatorio creado.");
-        else throw new Exception("No pudo crearse el arbol binario AVL o se creo vacio.");
-        return avlTree;
-    }
-
-    public static AVLTree<Integer> manualAVLTree() throws Exception {
-        int num;
-        AVLTree<Integer> avlTree = new AVLTree<>();
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("------------------------------");
-        System.out.println("Arbol AVL manual");
-        System.out.println("Ingrese el elemento a ingresar. Ingrese -1 para salir.");
-
-        do {
-            System.out.print("Elemento: ");
-            num = sc.nextInt();
-            if (num >= 0) avlTree.insert(avlTree.getRoot(), num);
-        } while (num != -1);
-
-        if (!avlTree.isEmpty()) System.out.println("Arbol binario AVL manual creado");
-        else throw new Exception("No pudo crearse el arbol binario AVL o se creo vacio");
-        return avlTree;
-    }
-
-    public static void printTreesInOrder(BinTree<Integer> binTree, AVLTree<Integer> avlTree) throws Exception {
-        int tmp;
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("------------------------------");
-        System.out.println("Seleccione un tipo de arbol.");
-        System.out.println("1- Arbol binario de busqueda");
-        System.out.println("2- Arbol AVL");
-        tmp = sc.nextInt();
-
-        if (tmp == 1) {
-            if (binTree == null) {
-                throw new Exception("\nEl arbol es nulo");
-            }
+    public static void print (int option){
+        if(option == 1)
             binTree.printInOrder();
-        } else if (tmp == 2) {
-            if (avlTree == null) {
-                throw new Exception("\nArbol nulo");
-            }
+        else if (option == 2)
             avlTree.printInOrder();
-        } else System.out.println("Opcion invalida");
+        else if (option == 3)
+            binHeap.printHeap();
     }
-
-    public static void printTreeDiagram(BinTree<Integer> binTree, AVLTree<Integer> avlTree) throws Exception {
-        int tmp;
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("------------------------------");
-        System.out.println("Seleccione un tipo de arbol.");
-        System.out.println("1- Arbol binario de busqueda");
-        System.out.println("2- Arbol AVL");
-
-        tmp = sc.nextInt();
-
-        if (tmp == 1) {
-            if (binTree == null) {
-                throw new Exception("\nArbol nulo");
-            }
-
-            System.out.println(binTree.printTree(binTree.getRoot()));
-        } else if (tmp == 2) {
-            if (avlTree == null) {
-                throw new Exception("\nArbol nulo");
-            }
-            System.out.println(avlTree.printTree(avlTree.getRoot()));
-        } else System.out.println("Opcion invalida");
+    public static void printTree (int option){
+        switch (option){
+            case 1:
+                System.out.println(binTree.printTree(binTree.getRoot()));
+                break;
+            case 2:
+                System.out.println(avlTree.printTree(avlTree.getRoot()));
+                break;
+            case 3:
+                System.out.println("Aún no implementado.");
+                binHeap.printHeap();
+                break;
+        }
     }
 }
